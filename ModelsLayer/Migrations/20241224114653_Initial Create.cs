@@ -19,8 +19,7 @@ namespace ModelsLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PresenterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    PresenterName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,13 +34,37 @@ namespace ModelsLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ConfirmPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RememberMe = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Table_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Schedules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Schedules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Schedules_Table_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Table_Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,21 +90,45 @@ namespace ModelsLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Table_PurchaseHistory",
+                name: "Admins",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    TicketId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CanManageUsers = table.Column<bool>(type: "bit", nullable: false),
+                    CanManageConferences = table.Column<bool>(type: "bit", nullable: false),
+                    CanManageOrders = table.Column<bool>(type: "bit", nullable: false),
+                    LastLogins = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Table_PurchaseHistory", x => x.Id);
+                    table.PrimaryKey("PK_Admins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Table_PurchaseHistory_Table_Tickets_TicketId",
+                        name: "FK_Admins_Table_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Table_Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Table_Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    SeatNumber = table.Column<int>(type: "int", nullable: false),
+                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TicketId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Table_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Table_Orders_Table_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Table_Tickets",
                         principalColumn: "Id",
@@ -89,8 +136,18 @@ namespace ModelsLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Table_PurchaseHistory_TicketId",
-                table: "Table_PurchaseHistory",
+                name: "IX_Admins_UserId",
+                table: "Admins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedules_EventId",
+                table: "Schedules",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Table_Orders_TicketId",
+                table: "Table_Orders",
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
@@ -103,7 +160,13 @@ namespace ModelsLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Table_PurchaseHistory");
+                name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "Schedules");
+
+            migrationBuilder.DropTable(
+                name: "Table_Orders");
 
             migrationBuilder.DropTable(
                 name: "Table_Users");

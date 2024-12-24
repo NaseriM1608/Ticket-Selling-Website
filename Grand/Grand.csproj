@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\css\assets\**" />
+    <Content Remove="wwwroot\css\assets\**" />
+    <EmbeddedResource Remove="wwwroot\css\assets\**" />
+    <None Remove="wwwroot\css\assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
@@ -21,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ModelsLayer\ModelsLayer.csproj" />
+    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +36,27 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\" />
-    <Folder Include="Views\ViewModels\" />
+    <Folder Include="Areas\User\Data\" />
+    <Folder Include="Areas\User\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\.DS_Store" />
+    <None Include="wwwroot\assets\css\.DS_Store" />
+    <None Include="wwwroot\assets\css\colors\.DS_Store" />
+    <None Include="wwwroot\assets\fonts\.DS_Store" />
+    <None Include="wwwroot\assets\img\.DS_Store" />
+    <None Include="wwwroot\assets\img\about\.DS_Store" />
+    <None Include="wwwroot\assets\img\art\.DS_Store" />
+    <None Include="wwwroot\assets\img\background\.DS_Store" />
+    <None Include="wwwroot\assets\img\blog\.DS_Store" />
+    <None Include="wwwroot\assets\img\gallery\.DS_Store" />
+    <None Include="wwwroot\assets\img\slider\.DS_Store" />
+    <None Include="wwwroot\assets\img\speaker\.DS_Store" />
+    <None Include="wwwroot\assets\img\sponsors\.DS_Store" />
+    <None Include="wwwroot\assets\img\team\.DS_Store" />
+    <None Include="wwwroot\assets\img\testimonial\.DS_Store" />
+    <None Include="wwwroot\assets\js\.DS_Store" />
   </ItemGroup>
 
 </Project>

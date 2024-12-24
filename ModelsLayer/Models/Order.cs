@@ -18,9 +18,10 @@ namespace ModelsLayer.Models
         public int UserId { get; set; }
         [DisplayName("تعداد")]
         public int Quantity { get; set; }
+        public int SeatNumber { get; set; }
         [DisplayName("تاریخ خرید")]
         public DateTime PurchaseDate { get; set; } = DateTime.Now;
         [ForeignKey("TicketId")]
-        public IEnumerable<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public Ticket Ticket { get; set; }
     }
 }

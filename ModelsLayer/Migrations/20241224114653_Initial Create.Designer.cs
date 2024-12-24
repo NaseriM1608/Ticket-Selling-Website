@@ -12,7 +12,7 @@ using ModelsLayer.Context;
 namespace ModelsLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241221100201_Initial Create")]
+    [Migration("20241224114653_Initial Create")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,6 +25,37 @@ namespace ModelsLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ModelsLayer.Models.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("CanManageConferences")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanManageOrders")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanManageUsers")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastLogins")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("ModelsLayer.Models.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -36,9 +67,6 @@ namespace ModelsLayer.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EventDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -67,6 +95,9 @@ namespace ModelsLayer.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("SeatNumber")
+                        .HasColumnType("int");
+
                     b.Property<int>("TicketId")
                         .HasColumnType("int");
 
@@ -77,7 +108,31 @@ namespace ModelsLayer.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Table_PurchaseHistory");
+                    b.ToTable("Table_Orders");
+                });
+
+            modelBuilder.Entity("ModelsLayer.Models.Schedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Ticket", b =>
@@ -116,9 +171,8 @@ namespace ModelsLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -134,12 +188,30 @@ namespace ModelsLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("RememberMe")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.ToTable("Table_Users");
+                });
+
+            modelBuilder.Entity("ModelsLayer.Models.Admin", b =>
+                {
+                    b.HasOne("ModelsLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Order", b =>
@@ -151,6 +223,17 @@ namespace ModelsLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("ModelsLayer.Models.Schedule", b =>
+                {
+                    b.HasOne("ModelsLayer.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Ticket", b =>

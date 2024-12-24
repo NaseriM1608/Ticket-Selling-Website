@@ -14,6 +14,7 @@ namespace RepositoryLayer.Interfaces
         bool Delete(int id);
         bool Delete(T entity);
         bool Update(T entity);
+        bool Update(int id);
         void Save();
     }
 }

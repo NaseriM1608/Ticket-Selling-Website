@@ -19,7 +19,6 @@ namespace ModelsLayer.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "فیلد {0} اجباری است.")]
         public int EventId { get; set; }
-        public int? SeatNumber { get; set; }
         [DisplayName("تعداد")]
         [Required(ErrorMessage = "فیلد {0} اجباری است.")]
         public int Quantity { get; set; }

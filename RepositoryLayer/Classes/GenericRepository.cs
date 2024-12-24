@@ -51,6 +51,20 @@ namespace RepositoryLayer.Classes
                 return false;
             }
         }
+
+        public bool Update(int id)
+        {
+            try
+            {
+                T entity = dbContext.Find(id);
+                db.Entry(entity).State = EntityState.Modified;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public bool Delete(int id)
         {
             try

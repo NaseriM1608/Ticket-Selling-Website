@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.Contracts;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 
 namespace ModelsLayer.Models
@@ -25,17 +26,23 @@ namespace ModelsLayer.Models
         [DisplayName("نام خانوادگی")]
         [MaxLength(60)]
         public string LastName { get; set; }
-        [DisplayName("آدرس ایمیل")]
+        [DisplayName("شماره موبایل")]
         [Required(ErrorMessage = "فیلد {0} اجباری است.")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [RegularExpression("(09)[0-9]{9}", ErrorMessage = "فرمت شماره موبایل صحیح نیست")]
+        public string PhoneNumber { get; set; }
         [DisplayName("رمز عبور")]
         [Required(ErrorMessage = "فیلد {0} اجباری است.")]
         [MinLength(8, ErrorMessage = "رمز عبور باید حداقل ۸ کاراکتر باشد.")]
-        [RegularExpression("^[a-zA-Z ]+$", ErrorMessage = "فقط حروف انگلیسی وارد شود")]
-        [PasswordPropertyText]
+        [RegularExpression("^(?=.*\\d)[A-Za-z0-9!@#$%^&*(),.?\":{}|<>]+$", ErrorMessage = "رمز عبور باید فقط حروف انگلیسی باشد و حداقل یک عدد داشته باشد.")]        [PasswordPropertyText]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+        [NotMapped]
+        [DisplayName("تکرار رمز عبور")]
+        [Required(ErrorMessage = "فیلد {0} اجباری است.")]
+        [Compare("Password", ErrorMessage = "رمز مشابه تکرار رمز نیست.")]
+        public string ConfirmPassword {  get; set; }
         public DateTime RegisterDate { get; set; } = DateTime.Now;
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool RememberMe { get; set; } = false;
     }
 }
