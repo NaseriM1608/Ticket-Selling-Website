@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ModelsLayer.Context;
+using RepositoryLayer.Classes;
 using ServiceLayer.Classes;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,14 @@ builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<OrderDetailsService>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<TicketRepository>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderDetailsRepository>();
+
 builder.Services.AddAutoMapper(typeof(Program));
+
 
 var app = builder.Build();
 
@@ -23,7 +31,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -31,12 +38,14 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    name: "Default",
+    pattern: "{controller=Home}/{action=Index}");
 
-app.MapControllerRoute(
-    name: "noArea",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "areas",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id}");
+});
 
 app.Run();

@@ -9,5 +9,6 @@ namespace ServiceLayer.Interfaces
 {
     public interface ITicketService : IEntityService<Ticket>
     {
+        public Ticket GetTicketByEventAndType(int eventId, string ticketType);
     }
 }

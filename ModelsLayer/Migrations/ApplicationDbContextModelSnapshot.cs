@@ -50,7 +50,7 @@ namespace ModelsLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Table_Admins");
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Event", b =>
@@ -86,24 +86,12 @@ namespace ModelsLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("PurchaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SeatNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Table_Orders");
                 });
@@ -129,7 +117,7 @@ namespace ModelsLayer.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Table_Schedules");
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Ticket", b =>
@@ -171,6 +159,9 @@ namespace ModelsLayer.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -200,6 +191,35 @@ namespace ModelsLayer.Migrations
                     b.ToTable("Table_Users");
                 });
 
+            modelBuilder.Entity("OrderDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeatNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("Table_OrderDetails");
+                });
+
             modelBuilder.Entity("ModelsLayer.Models.Admin", b =>
                 {
                     b.HasOne("ModelsLayer.Models.User", "User")
@@ -213,13 +233,13 @@ namespace ModelsLayer.Migrations
 
             modelBuilder.Entity("ModelsLayer.Models.Order", b =>
                 {
-                    b.HasOne("ModelsLayer.Models.Ticket", "Ticket")
+                    b.HasOne("ModelsLayer.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("TicketId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ticket");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Schedule", b =>
@@ -242,6 +262,25 @@ namespace ModelsLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("OrderDetails", b =>
+                {
+                    b.HasOne("ModelsLayer.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ModelsLayer.Models.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Event", b =>

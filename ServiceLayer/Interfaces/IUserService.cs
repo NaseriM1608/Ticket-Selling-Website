@@ -9,5 +9,7 @@ namespace ServiceLayer.Interfaces
 {
     public interface IUserService : IEntityService<User> 
     {
+        User Authenticate(string number, string password);
+        string HashPassword(User user);
     }
 }

@@ -9,7 +9,7 @@ using RepositoryLayer.Interfaces;
 
 namespace RepositoryLayer.Classes
 {
-    internal class OrderRepository : GenericRepository<Order>, IOrderRepository
+    public class OrderRepository : GenericRepository<Order>, IOrderRepository
     {
         public OrderRepository(ApplicationDbContext context) : base(context)
         {

@@ -1,0 +1,112 @@
+﻿@model ModelsLayer.Models.Event
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Ticket</title>
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/fonts/line-icons.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/responsive.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="header-wrap">
+        <nav class="navbar navbar-expand-lg fixed-top scrolling-navbar">
+            <div class="container">
+                <a class="navbar-brand" href="index.html"><img src="~/assets/img/logo.png" alt="Logo"></a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="page-background">
+        <img src="~/assets/img/OIP.jpeg" alt="Ticket Background">
+    </div>
+
+    <!-- Ticket Purchase Section -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h1 class="section-title">بلیط خود را تهیه کنید</h1>
+                    <p>فرم زیر را پر کنید تا صندلی خود را برای این رویداد حفظ کنید.</p>
+                    <form asp-action="PurchaseTicket" asp-controller="Events" method="post">
+                        <!-- Event ID -->
+                        @Html.HiddenFor(model => model.Id)
+
+                        <!-- Ticket Type Selection -->
+                        <div class="form-group">
+                            <label for="TicketType">نوع بلیط</label>
+                            <select name="TicketType" class="form-control" required>
+                                <option value="Basic">Standard - ريال50</option>
+                                <option value="VIP">VIP - ريال100</option>
+                            </select>
+                        </div>
+
+                        <!-- Hidden Seat Number -->
+                        <input type="hidden" name="SeatNumber" id="selected-seat" value="" />
+
+                        <!-- Seat Selection -->
+                        <h2 class="mt-4">Select Your Seat</h2>
+                        <div class="seat-grid d-flex flex-wrap justify-content-center mt-3">
+                            <!-- Seats will be generated dynamically -->
+                        </div>
+
+                        <button type="submit" class="btn btn-common mt-4">خرید بلیط</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>© 2024 Event Conference. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const seatGrid = document.querySelector('.seat-grid');
+        const totalSeats = 100;
+        const vipSeats = 10;
+        let selectedSeat = null;
+
+        // Generate Seats
+        for (let i = 1; i <= totalSeats; i++) {
+            const seat = document.createElement('div');
+            seat.classList.add('seat', 'm-2', 'p-2', 'border', 'text-center');
+            seat.textContent = i;
+
+            // Highlight VIP Seats
+            if (i <= vipSeats) {
+                seat.classList.add('vip', 'bg-warning');
+            } else {
+                seat.classList.add('bg-light');
+            }
+
+            // Seat Selection Logic
+            seat.addEventListener('click', () => {
+                // Deselect Previous Seat
+                if (selectedSeat) {
+                    selectedSeat.classList.remove('selected', 'bg-success', 'text-white');
+                }
+
+                // Select Current Seat
+                selectedSeat = seat;
+                seat.classList.add('selected', 'bg-success', 'text-white');
+
+                // Update Hidden Input Value
+                document.getElementById('selected-seat').value = i;
+            });
+
+            seat.style.cursor = 'pointer';
+            seat.style.width = '40px';
+            seat.style.height = '40px';
+            seatGrid.appendChild(seat);
+        }
+    </script>
+</body>
+</html>

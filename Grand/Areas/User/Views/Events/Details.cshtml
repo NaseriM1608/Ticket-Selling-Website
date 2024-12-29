@@ -1,0 +1,57 @@
+﻿@model ModelsLayer.Models.Event
+
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+        <div class="container">
+            <h1 class="text-center">@ViewData["Title"]</h1>
+        </div>
+    </header>
+
+    <!-- Event Details Section -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-secondary text-white text-center">
+                    <h2>@Html.DisplayFor(model => model.Name)</h2>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted text-center">
+                        ارائه شده توسط <strong>@Html.DisplayFor(model => model.PresenterName)</strong>
+                    </p>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Description</h5>
+                            <p>@Html.DisplayFor(model => model.Description)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    @Html.ActionLink("خرید بلیط", "PurchaseTicket", new { id = Model.Id }, new { @class = "btn btn-common"})
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-3">
+        <div class="container text-center">
+            <p>&copy; 2024 Event Conference. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

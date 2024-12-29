@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ModelsLayer.Models
 {
+    [Table("Table_Admins")]
     public class Admin : BaseEntity
     {
         [Key]

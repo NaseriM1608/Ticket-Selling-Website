@@ -2,12 +2,10 @@
 
 namespace Grand.Areas.User.Controllers
 {
-    [Area("User")]
+    [Area(nameof(ModelsLayer.Models.User))]
+    [Route($"{nameof(ModelsLayer.Models.User)}/Home/")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
     }
 }

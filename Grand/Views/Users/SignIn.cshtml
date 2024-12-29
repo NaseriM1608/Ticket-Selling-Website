@@ -1,12 +1,12 @@
-﻿@model SignUpViewModel
-
+﻿@using Grand.Views.ViewModels
+@model SignInViewModel
 @{
-    ViewData["Title"] = "SignUp";
+    ViewData["Title"] = "SignIn";
 }
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
     <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/css/main.css">
 </head>
@@ -19,26 +19,19 @@
         </nav>
     </header>
     <div class="page-background">
-        <img src="~/assets/img/OIP.jpeg" alt="SignUp Background">
+        <img src="~/assets/img/OIP.jpeg" alt="SignIn Background">
     </div>
-    <hr />
     <section class="section-padding">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <h1 class="section-title">Sign Up</h1>
-                    <form asp-action="SignUp">
+                    @if(TempData["Suspended"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Suspended"]</div>
+                    }
+                    <h1 class="section-title">Sign in</h1>
+                    <form asp-action="SignIn">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Name" class="control-label text-white"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="LastName" class="control-label text-white"></label>
-                            <input asp-for="LastName" class="form-control" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                        </div>
                         <div class="form-group">
                             <label asp-for="PhoneNumber" class="control-label text-white"></label>
                             <input asp-for="PhoneNumber" class="form-control" />
@@ -49,23 +42,18 @@
                             <input asp-for="Password" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="ConfirmPassword" class="control-label text-white"></label>
-                            <input asp-for="ConfirmPassword" type="password" class="form-control" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        <div>
+                            <input type="checkbox" asp-for="RememberMe" />
+                            <label asp-for="RememberMe" class="text-white"></label>
                         </div>
-                        <div class="form-group">
-                            <input type="submit" value="Sign Up" class="btn btn-common" />
+                        <div class="form-group mt-2">
+                            <input type="submit" value="Sign In" class="btn btn-common" />
                         </div>
                     </form>
-                    <span><a asp-controller="Users" asp-action="SignIn" class="btn btn-common">ورود با حساب کاربری</a></span>
                 </div>
             </div>
         </div>
     </section>
-
-
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }
 </body>
+
+

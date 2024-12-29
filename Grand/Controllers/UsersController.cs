@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Grand.Views.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelsLayer.Models;
 using ServiceLayer.Classes;
@@ -7,10 +10,12 @@ namespace Grand.Controllers
 {
     public class UsersController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly UserService _UserService;
-        public UsersController(UserService userService)
+        public UsersController(IMapper mapper, UserService userService)
         {
             _UserService = userService;
+            _mapper = mapper;
         }
         [HttpGet]
         public ActionResult SignUp()
@@ -18,42 +23,50 @@ namespace Grand.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SignUp([Bind(include: "Name, LastName, PhoneNumber, Password, ConfirmPassword")] User newUser)
+        public ActionResult SignUp([Bind(include: "Name, LastName, PhoneNumber, Password, ConfirmPassword")] SignUpViewModel model)
         {
             if(ModelState.IsValid)
             {
+                var newUser = _mapper.Map<User>(model);
+                newUser.Password = _UserService.HashPassword(newUser);
                 _UserService.Add(newUser);
+                TempData["UserId"] = newUser.Id;
                 _UserService.Save();
                 return RedirectToAction("Index", "Home", new { area = "User" });
             }
 
-            return View(newUser);
+            return View(model);
         }
-        public ActionResult Index()
-        {
-            return View(_UserService.GetAll());
-        }
-
-        public ActionResult Details(int id)
-        {
-            return View(_UserService.GetEntity(id));
-        }
-        public ActionResult Create()
+        [HttpGet]
+        public ActionResult SignIn()
         {
             return View();
         }
-
-        
-        public ActionResult Edit(int id)
+        [HttpPost]
+        public ActionResult SignIn([Bind(include:"PhoneNumber, Password, RememberMe")]SignInViewModel model)
         {
-            return View();
-        }
-
+            if (ModelState.IsValid)
+            {
+                var user = _UserService.Authenticate(model.PhoneNumber, model.Password);
+                if (user == null)
+                    ModelState.AddModelError("PhoneNumber", "نام کاربری یا رمز اشتباه است.");
+                else
+                {
+                    if (!user.IsActive)
+                        TempData["Suspended"] = "حساب کاربری شما مسدود شده است";
+                    else
+                    {
+                        TempData["UserId"] = user.Id;
+                        return RedirectToAction("Index", "Home", new { area = user.IsAdmin ? "Admin" : "User", id = (int)TempData["UserId"] });
+                    }
+                }
+            }
+            return View(model);
+        }  
         
-        public ActionResult Delete(int id)
+        public void Dispose()
         {
-            return View();
+            _UserService.Dispose();
         }
-        
     }
 }

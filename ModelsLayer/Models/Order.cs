@@ -16,12 +16,7 @@ namespace ModelsLayer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int UserId { get; set; }
-        [DisplayName("تعداد")]
-        public int Quantity { get; set; }
-        public int SeatNumber { get; set; }
-        [DisplayName("تاریخ خرید")]
-        public DateTime PurchaseDate { get; set; } = DateTime.Now;
-        [ForeignKey("TicketId")]
-        public Ticket Ticket { get; set; }
+        [ForeignKey("UserId")]
+        public User User { get; set; }
     }
 }

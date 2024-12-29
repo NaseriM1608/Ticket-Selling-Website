@@ -17,5 +17,6 @@ namespace ModelsLayer.Context
         public DbSet<Order> Orders { get; set;}
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
     }
 }

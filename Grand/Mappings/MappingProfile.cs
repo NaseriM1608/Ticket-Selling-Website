@@ -7,5 +7,6 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<User, UserViewModel>();
+        CreateMap<SignUpViewModel, User>();
     }
 }

@@ -33,16 +33,13 @@ namespace ModelsLayer.Models
         [DisplayName("رمز عبور")]
         [Required(ErrorMessage = "فیلد {0} اجباری است.")]
         [MinLength(8, ErrorMessage = "رمز عبور باید حداقل ۸ کاراکتر باشد.")]
-        [RegularExpression("^(?=.*\\d)[A-Za-z0-9!@#$%^&*(),.?\":{}|<>]+$", ErrorMessage = "رمز عبور باید فقط حروف انگلیسی باشد و حداقل یک عدد داشته باشد.")]        [PasswordPropertyText]
+        [RegularExpression("^(?=.*\\d)[A-Za-z0-9!@#$%^&*(),.?\":{}|<>]+$", ErrorMessage = "رمز عبور باید فقط حروف انگلیسی باشد و حداقل یک عدد داشته باشد.")]     
+        [PasswordPropertyText]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [NotMapped]
-        [DisplayName("تکرار رمز عبور")]
-        [Required(ErrorMessage = "فیلد {0} اجباری است.")]
-        [Compare("Password", ErrorMessage = "رمز مشابه تکرار رمز نیست.")]
-        public string ConfirmPassword {  get; set; }
         public DateTime RegisterDate { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = true;
-        public bool RememberMe { get; set; } = false;
+        public bool RememberMe { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }
